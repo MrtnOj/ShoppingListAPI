@@ -1,8 +1,9 @@
 import express from 'express' 
 import bodyParser from 'body-parser'
 import itemsRoutes from './routes/items'
+import categoriesRoutes from './routes/categories'
 
-import db from './util/database'
+import sequelize from './util/database'
 
 const app = express()
 
@@ -20,6 +21,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(itemsRoutes)
+app.use('/items', itemsRoutes)
+app.use('/categories', categoriesRoutes)
 
-app.listen(3000)
+sequelize.sync().then(result => {
+    console.log(result)
+}).catch(err => console.log(err))
+
+app.listen(8080)

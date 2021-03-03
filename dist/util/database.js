@@ -1,11 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pool = require('pg').Pool;
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'shoppinglist',
-    password: '1',
-    port: 5432,
+const sequelize_1 = require("sequelize");
+const sequelize = new sequelize_1.Sequelize('shoppinglist', 'postgres', '1', {
+    dialect: 'postgres',
+    host: 'localhost'
 });
-exports.default = pool;
+exports.default = sequelize;

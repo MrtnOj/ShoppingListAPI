@@ -3,18 +3,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Item = void 0;
+const sequelize_1 = require("sequelize");
 const database_1 = __importDefault(require("../util/database"));
-class Item {
-    constructor(id, name, categoryId, lasts, lastBought) {
-        this.id = id;
-        this.name = name;
-        this.categoryId = categoryId;
-        this.lasts = lasts;
-        this.lastBought = lastBought;
+const category_1 = __importDefault(require("./category"));
+const Item = database_1.default.define('item', {
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    name: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
+    },
+    category_id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: category_1.default,
+            key: 'id'
+        }
+    },
+    lasts: {
+        type: sequelize_1.DataTypes.INTEGER
+    },
+    last_bought: {
+        type: sequelize_1.DataTypes.DATE
     }
-    static fetchAll() {
-        return database_1.default.query('SELECT * FROM items');
-    }
-}
-exports.Item = Item;
+});
+exports.default = Item;
+// export class Item implements ItemInterface {
+//     id: number;
+//     name: string;
+//     categoryId?: number;
+//     lasts?: number;
+//     lastBought?: Date 
+//     constructor(id: number, name: string, categoryId?: number, lasts?: number, lastBought?: Date) {
+//         this.id = id;
+//         this.name = name;
+//         this.categoryId = categoryId;
+//         this.lasts = lasts;
+//         this.lastBought = lastBought;
+//     }
+//     static fetchAll() {
+//         return db.query('SELECT * FROM items')
+//     }
+// }

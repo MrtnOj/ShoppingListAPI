@@ -1,19 +1,37 @@
 import { ItemInterface } from '../models/item'
 
-import { Item } from '../models/item'
+import Item from '../models/item'
 
 import { Request, Response, NextFunction } from 'express'
 
-const items: ItemInterface[] = [
-    {id: 1, name: 'Sitt', categoryId: 5}
-]
-
 export const getItems = (req: Request, res: Response, next: NextFunction) => {
-    Item.fetchAll()
-    .then((result: any) => {
-        return res.status(200).json(result.rows)
+    Item.findAll()
+    .then(result => {
+        res.json(result)
+        console.log(result)
     })
-    .catch((err: any) => {
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+export const createItem = (req: Request, res: Response, next: NextFunction) => {
+    const name = req.body.name
+    const categoryId = req.body.categoryId
+    const lasts = req.body.lasts
+    const lastBought = req.body.lastBought
+
+    Item.create({
+        name: name,
+        category_id: categoryId,
+        lasts: lasts,
+        last_bought: lastBought
+    })
+    .then(result => {
+        res.send(result)
+        console.log(result)
+    })
+    .catch(err => {
         console.log(err)
     })
 }

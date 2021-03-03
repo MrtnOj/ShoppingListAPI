@@ -1,11 +1,8 @@
-const Pool = require('pg').Pool
+import { Sequelize } from 'sequelize'
 
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'shoppinglist',
-    password: '1',
-    port: 5432,
+const sequelize = new Sequelize('shoppinglist', 'postgres', '1', {
+    dialect: 'postgres',
+    host: 'localhost'
 })
 
-export default pool
+export default sequelize

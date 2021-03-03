@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const items_1 = __importDefault(require("./routes/items"));
+const categories_1 = __importDefault(require("./routes/categories"));
+const database_1 = __importDefault(require("./util/database"));
 const app = express_1.default();
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({
@@ -17,5 +19,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-app.use(items_1.default);
-app.listen(3000);
+app.use('/items', items_1.default);
+app.use('/categories', categories_1.default);
+database_1.default.sync().then(result => {
+    console.log(result);
+}).catch(err => console.log(err));
+app.listen(8080);

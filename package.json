@@ -11,6 +11,7 @@
   "author": "Martin Ojasalu",
   "license": "ISC",
   "dependencies": {
+    "@types/express-validator": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

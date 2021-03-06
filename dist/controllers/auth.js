@@ -12,7 +12,7 @@ const signUp = (req, res, next) => {
     if (!errors.isEmpty()) {
         console.log(errors.array()[0].msg);
         return res.status(400).json({
-            error: errors
+            error: errors.array()[0].msg
         });
         // const error = new Error(errors.array()[0].msg);
         // console.log(error)

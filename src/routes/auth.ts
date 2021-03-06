@@ -13,7 +13,8 @@ router.post('/signup',
         User.findOne({ where: { email: value} })
         .then(user => {
             if (user) {
-                return 
+                return Promise.reject('Email address already exists')
+                // throw error for handling
             }
         })
     })

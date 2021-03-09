@@ -27,7 +27,7 @@ app.use('/categories', categories_1.default);
 app.use('/auth', auth_1.default);
 item_1.default.belongsTo(category_1.default);
 category_1.default.hasMany(item_1.default);
-database_1.default.sync()
+database_1.default.sync({ alter: true })
     .then(result => {
     console.log(result);
 })

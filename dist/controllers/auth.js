@@ -6,17 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logIn = exports.signUp = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const express_validator_1 = require("express-validator");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const signUp = (req, res, next) => {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors.array()[0].msg);
         return res.status(400).json({
             error: errors.array()[0].msg
         });
-        // const error = new Error(errors.array()[0].msg);
-        // console.log(error)
-        // throw error;
     }
     const username = req.body.username;
     const email = req.body.email;
@@ -51,5 +48,32 @@ exports.signUp = signUp;
 const logIn = (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
+    let loadedUser;
+    user_1.default.findOne({ where: { username: username } })
+        .then((user) => {
+        if (!user) {
+            const error = new Error('User with this username could not be found');
+            throw error;
+        }
+        loadedUser = user;
+        return bcryptjs_1.default.compare(password, user.password);
+    })
+        .then(isEqual => {
+        if (!isEqual) {
+            const error = new Error('Wrong password');
+            throw error;
+        }
+        const token = jsonwebtoken_1.default.sign({
+            username: loadedUser.username,
+            userId: loadedUser.id.toString()
+        }, 'Theguywasaninteriordecorator,killed16czechoslovakians');
+        res.status(200).json({ token: token, userId: loadedUser.id.toString(), username: loadedUser.username });
+    })
+        .catch(err => {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    });
 };
 exports.logIn = logIn;

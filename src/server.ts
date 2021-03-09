@@ -32,7 +32,7 @@ app.use('/auth', authRoutes)
 Item.belongsTo(Category)
 Category.hasMany(Item)
 
-sequelize.sync()
+sequelize.sync({ alter: true })
     .then(result => {
         console.log(result)
     })

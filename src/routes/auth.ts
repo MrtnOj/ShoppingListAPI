@@ -5,8 +5,8 @@ import User from '../models/user'
 
 const router = Router()
 
-router.post('/signup', 
-    [body('email')
+router.post('/signup', [
+    body('email')
         .isEmail()
         .withMessage('Please enter a valid email')
         .custom(value => {
@@ -34,5 +34,7 @@ router.post('/signup',
         })
     ], 
 signUp)
+
+router.post('/login', logIn)
 
 export default router

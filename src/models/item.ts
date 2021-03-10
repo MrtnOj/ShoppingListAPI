@@ -23,13 +23,6 @@ const Item = sequelize.define('item', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    // category_id: {
-    //     type: DataTypes.INTEGER,
-    //     references: {
-    //         model: Category,
-    //         key: 'id'
-    //     }
-    // },
     lasts: {
         type: DataTypes.INTEGER
     },

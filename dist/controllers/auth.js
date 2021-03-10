@@ -52,27 +52,26 @@ const logIn = (req, res, next) => {
     user_1.default.findOne({ where: { username: username } })
         .then((user) => {
         if (!user) {
-            const error = new Error('User with this username could not be found');
-            throw error;
+            //   return res.status(400).json({ error: 'User with this username could not be found' })
+            return Promise.reject('No such user you dumb fuck');
         }
         loadedUser = user;
         return bcryptjs_1.default.compare(password, user.password);
     })
         .then(isEqual => {
         if (!isEqual) {
-            const error = new Error('Wrong password');
-            throw error;
+            // const error = new Error('Wrong password')
+            // throw error
+            return Promise.reject('Wrong password fuckin daft toad');
         }
         const token = jsonwebtoken_1.default.sign({
-            username: loadedUser.username,
-            userId: loadedUser.id.toString()
+            username: loadedUser === null || loadedUser === void 0 ? void 0 : loadedUser.username,
+            userId: loadedUser === null || loadedUser === void 0 ? void 0 : loadedUser.id.toString()
         }, 'Theguywasaninteriordecorator,killed16czechoslovakians');
-        res.status(200).json({ token: token, userId: loadedUser.id.toString(), username: loadedUser.username });
+        return res.status(200).json({ token: token, userId: loadedUser === null || loadedUser === void 0 ? void 0 : loadedUser.id.toString(), username: loadedUser === null || loadedUser === void 0 ? void 0 : loadedUser.username });
     })
         .catch(err => {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
+        return res.status(400).json({ error: err });
         next(err);
     });
 };

@@ -16,13 +16,6 @@ const Item = database_1.default.define('item', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    // category_id: {
-    //     type: DataTypes.INTEGER,
-    //     references: {
-    //         model: Category,
-    //         key: 'id'
-    //     }
-    // },
     lasts: {
         type: sequelize_1.DataTypes.INTEGER
     },

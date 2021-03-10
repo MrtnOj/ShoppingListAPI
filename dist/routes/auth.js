@@ -8,7 +8,8 @@ const express_1 = require("express");
 const auth_1 = require("../controllers/auth");
 const user_1 = __importDefault(require("../models/user"));
 const router = express_1.Router();
-router.post('/signup', [express_validator_1.body('email')
+router.post('/signup', [
+    express_validator_1.body('email')
         .isEmail()
         .withMessage('Please enter a valid email')
         .custom(value => {
@@ -35,4 +36,5 @@ router.post('/signup', [express_validator_1.body('email')
         return true;
     })
 ], auth_1.signUp);
+router.post('/login', auth_1.logIn);
 exports.default = router;

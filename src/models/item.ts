@@ -4,15 +4,17 @@ import sequelize from '../util/database'
 import Category from './category'
 
 
-export interface ItemInterface {
+export interface ItemInterface extends Model {
     id: number;
     name: string;
     categoryId?: number;
     lasts?: number;
-    lastBought?: Date 
+    lastBought?: Date;
+    createdAt: Date;
+    updatedAt: Date
 }
 
-const Item = sequelize.define('item', {
+const Item = sequelize.define<ItemInterface>('item', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

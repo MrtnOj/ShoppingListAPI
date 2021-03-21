@@ -20,7 +20,6 @@ router.post('/signup', [
             }
         });
     })
-        .withMessage('Email address already exists')
         .normalizeEmail(),
     express_validator_1.body('username')
         .trim()

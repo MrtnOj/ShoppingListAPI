@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes } from 'sequelize'
-import sequelize from '../util/database'
+import db from '../util/database'
 
 import Category from './category'
 
@@ -14,7 +14,7 @@ export interface ItemInterface extends Model {
     updatedAt: Date
 }
 
-const Item = sequelize.define<ItemInterface>('item', {
+const Item = db.define<ItemInterface>('item', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -32,6 +32,6 @@ const Item = sequelize.define<ItemInterface>('item', {
         type: DataTypes.DATE
     }
 
-})
+}, { timestamps: false})
 
 export default Item

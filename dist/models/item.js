@@ -22,5 +22,5 @@ const Item = database_1.default.define('item', {
     last_bought: {
         type: sequelize_1.DataTypes.DATE
     }
-});
+}, { timestamps: false });
 exports.default = Item;

@@ -17,7 +17,6 @@ router.post('/signup', [
                 }
             })
         })
-        .withMessage('Email address already exists')
         .normalizeEmail(),
     body('username')
         .trim()

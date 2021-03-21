@@ -24,8 +24,8 @@ export const signUp = (req: Request, res: Response, next: NextFunction) => {
                 password: hashedPw
             })
             .then(result => {
-                res.send(result)
-                console.log(result)
+                // res.send(result)
+                console.log(result.username)
             })
             .catch(err => {
                 console.log(err)
@@ -49,7 +49,6 @@ export const logIn = (req: Request, res: Response, next: NextFunction) => {
     User.findOne({where: { username: username}} ) 
         .then((user) => {
             if (!user) {
-            //   return res.status(400).json({ error: 'User with this username could not be found' })
                 return Promise.reject('No such user you dumb fuck')
             }
             loadedUser = user
@@ -57,8 +56,6 @@ export const logIn = (req: Request, res: Response, next: NextFunction) => {
         })
         .then(isEqual => {
             if (!isEqual) {
-                // const error = new Error('Wrong password')
-                // throw error
                 return Promise.reject('Wrong password fuckin daft toad')
             }
             const token = jwt.sign({

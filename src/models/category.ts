@@ -1,7 +1,14 @@
 import { Sequelize, Model, DataTypes } from 'sequelize'
 import sequelize from '../util/database'
 
-const Category = sequelize.define('category', {
+export interface CategoryAttributes extends Model {
+    id: number;
+    name: string;
+    createdAt?: Date;
+    updatedAt?: Date
+}
+
+const Category = sequelize.define<CategoryAttributes>('category', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,7 +19,6 @@ const Category = sequelize.define('category', {
         type: DataTypes.STRING,
         allowNull: false
     }
-
-})
+}, { timestamps: false})
 
 export default Category

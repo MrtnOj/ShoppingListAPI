@@ -25,7 +25,7 @@ export const signUp = (req: Request, res: Response, next: NextFunction) => {
             })
             .then(result => {
                 // res.send(result)
-                console.log(result.username)
+                console.log(result)
             })
             .catch(err => {
                 console.log(err)

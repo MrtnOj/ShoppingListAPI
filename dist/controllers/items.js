@@ -23,7 +23,7 @@ const createItem = (req, res, next) => {
     const lastBought = req.body.lastBought;
     item_1.default.create({
         name: name,
-        category_id: categoryId,
+        categoryId: categoryId,
         lasts: lasts,
         last_bought: lastBought
     })

@@ -3,8 +3,8 @@ import db from '../util/database'
 
 export interface ListAttributes extends Model {
     id: number;
-    item_id: number;
-    user_id: number;
+    itemId: number;
+    userId: number;
     createdAt: Date;
     updatedAt: Date;
 }

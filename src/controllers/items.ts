@@ -23,7 +23,7 @@ export const createItem = (req: Request, res: Response, next: NextFunction) => {
 
     Item.create({
         name: name,
-        category_id: categoryId,
+        categoryId: categoryId,
         lasts: lasts,
         last_bought: lastBought
     })

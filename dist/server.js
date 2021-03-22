@@ -17,11 +17,6 @@ const database_1 = __importDefault(require("./util/database"));
 const listItem_1 = __importDefault(require("./models/listItem"));
 const app = express_1.default();
 app.use(body_parser_1.default.json());
-// app.use(
-//     bodyParser.urlencoded({
-//         extended: true,
-//     })
-// )
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
@@ -36,10 +31,12 @@ item_1.default.belongsTo(category_1.default);
 category_1.default.hasMany(item_1.default);
 list_2.default.belongsTo(user_1.default);
 user_1.default.hasMany(list_2.default);
-listItem_1.default.belongsTo(list_2.default);
-list_2.default.hasMany(listItem_1.default);
-listItem_1.default.belongsTo(item_1.default);
-item_1.default.hasMany(listItem_1.default);
+list_2.default.belongsToMany(item_1.default, { through: listItem_1.default });
+item_1.default.belongsToMany(list_2.default, { through: listItem_1.default });
+// ListItem.belongsTo(List)
+// List.hasMany(ListItem)
+// ListItem.belongsTo(Item)
+// Item.hasMany(ListItem)
 database_1.default.sync({ alter: true })
     .then(result => {
     console.log(result);

@@ -16,11 +16,6 @@ import ListItem from './models/listItem'
 const app = express()
 
 app.use(bodyParser.json())
-// app.use(
-//     bodyParser.urlencoded({
-//         extended: true,
-//     })
-// )
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -40,14 +35,19 @@ Category.hasMany(Item)
 List.belongsTo(User)
 User.hasMany(List)
 
-ListItem.belongsTo(List)
-List.hasMany(ListItem)
+List.belongsToMany(Item, { through: ListItem})
+Item.belongsToMany(List, { through: ListItem})
 
-ListItem.belongsTo(Item)
-Item.hasMany(ListItem)
+// ListItem.belongsTo(List)
+// List.hasMany(ListItem)
+
+// ListItem.belongsTo(Item)
+// Item.hasMany(ListItem)
 
 
-sequelize.sync({ alter: true })
+sequelize.sync(
+    { alter: true }
+    )
     .then(result => {
         console.log(result)
     })

@@ -28,7 +28,7 @@ const signUp = (req, res, next) => {
         })
             .then(result => {
             // res.send(result)
-            console.log(result.username);
+            console.log(result);
         })
             .catch(err => {
             console.log(err);

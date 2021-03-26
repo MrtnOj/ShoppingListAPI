@@ -48,8 +48,9 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
                 listId: result.id,
                 itemId: listItem.id
             })
-            .then(res => {
+            .then(response => {
                 console.log(res)
+                res.send({ message: 'List created'})
             })
         })
     })

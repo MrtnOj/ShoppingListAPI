@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
+exports.insertIntoList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
 const list_1 = __importDefault(require("../models/list"));
 const listItem_1 = __importDefault(require("../models/listItem"));
 const item_1 = __importDefault(require("../models/item"));
+const category_1 = __importDefault(require("../models/category"));
 const getUserLists = (req, res, next) => {
     const userId = req.params.userId;
     list_1.default.findAll({ where: { userId: userId } })
@@ -52,7 +53,7 @@ const saveList = (req, res, next) => {
             })
                 .then(response => {
                 console.log(res);
-                res.send({ message: 'List created' });
+                res.send(response);
             });
         });
     })
@@ -61,3 +62,80 @@ const saveList = (req, res, next) => {
     });
 };
 exports.saveList = saveList;
+const insertIntoList = (req, res, next) => {
+    const listId = parseInt(req.params.listId);
+    const itemId = req.body.itemId;
+    const itemName = req.body.name;
+    const category = req.body.category;
+    if (itemId) {
+        // If 
+        listItem_1.default.create({
+            listId: listId,
+            itemId: itemId
+        })
+            .then(response => {
+            res.send(response);
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else if (!itemId && category !== '') {
+        category_1.default.findOne({ where: { name: category } })
+            .then(cat => {
+            if (cat) {
+                item_1.default.create({
+                    name: itemName,
+                    categoryId: cat.get('id')
+                })
+                    .then(item => {
+                    listItem_1.default.create({
+                        listId: listId,
+                        itemId: item.get('id')
+                    })
+                        .then(response => {
+                        res.send(response);
+                    });
+                });
+            }
+            else {
+                category_1.default.create({
+                    name: category
+                })
+                    .then(category => {
+                    item_1.default.create({
+                        name: itemName,
+                        categoryId: category.get('id')
+                    })
+                        .then(item => {
+                        listItem_1.default.create({
+                            listId: listId,
+                            itemId: item.get('id')
+                        })
+                            .then(response => {
+                            res.send(response);
+                        });
+                    });
+                });
+            }
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else if (!itemId && category === '') {
+        item_1.default.create({
+            name: itemName
+        })
+            .then(item => {
+            listItem_1.default.create({
+                listId: listId,
+                itemId: item.get('id')
+            })
+                .then(response => {
+                res.send(response);
+            });
+        });
+    }
+};
+exports.insertIntoList = insertIntoList;

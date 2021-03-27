@@ -1,9 +1,10 @@
 import List from '../models/list'
 import ListItem from '../models/listItem'
 import Item from '../models/item'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, response } from 'express'
 import { ListAttributes } from '../models/list'
 import { ItemInterface } from '../models/item'
+import Category from '../models/category'
 
 export const getUserLists = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
@@ -50,11 +51,85 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
             })
             .then(response => {
                 console.log(res)
-                res.send({ message: 'List created'})
+                res.send(response)
             })
         })
     })
     .catch(err => {
         console.log(err)
     })
+}
+
+export const insertIntoList = (req: Request, res: Response, next: NextFunction) => {
+    const listId: number = parseInt(req.params.listId)
+    const itemId: number = req.body.itemId
+    const itemName: string = req.body.name 
+    const category: string = req.body.category
+    if (itemId) {
+        // If 
+        ListItem.create({
+            listId: listId,
+            itemId: itemId
+        })
+        .then(response => {
+            res.send(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } else if (!itemId && category !== '') {
+        Category.findOne({ where: { name: category }})
+        .then(cat => {
+            if (cat) {
+                Item.create({
+                    name: itemName,
+                    categoryId: cat.get('id')
+                })
+                .then(item => {
+                    ListItem.create({
+                        listId: listId,
+                        itemId: item.get('id')
+                    })
+                    .then(response => {
+                        res.send(response)
+                    })
+                })
+            } else {
+                Category.create({
+                    name: category
+                })
+                .then(category => {
+                    Item.create({
+                        name: itemName,
+                        categoryId: category.get('id')
+                    })
+                    .then(item => {
+                        ListItem.create({
+                            listId: listId,
+                            itemId: item.get('id')
+                        })
+                        .then(response => {
+                            res.send(response)
+                        })
+                    })
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } else if (!itemId && category === '') {
+        Item.create({
+            name: itemName
+        })
+        .then(item => {
+            ListItem.create({
+                listId: listId,
+                itemId: item.get('id')
+            })
+            .then(response => {
+                res.send(response)
+            })
+        })
+    }
 }

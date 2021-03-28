@@ -60,6 +60,17 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
     })
 }
 
+export const deleteList = (req: Request, res: Response, next: NextFunction) => {
+    const listId: number = parseInt(req.params.listId)
+    List.destroy({ where: { id: listId }})
+    .then(response => {
+        res.send(response)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 export const insertIntoList = (req: Request, res: Response, next: NextFunction) => {
     const listId: number = parseInt(req.params.listId)
     const itemId: number = req.body.itemId

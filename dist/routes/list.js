@@ -6,5 +6,6 @@ const router = express_1.Router();
 router.get('/:userId', list_1.getUserLists);
 router.get('/listdetails/:listId', list_1.getListDetails);
 router.post('/add/:listId', list_1.insertIntoList);
+router.delete('/delete/:listId', list_1.deleteList);
 router.post('/', list_1.saveList);
 exports.default = router;

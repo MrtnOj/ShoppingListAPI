@@ -66,7 +66,6 @@ export const insertIntoList = (req: Request, res: Response, next: NextFunction) 
     const itemName: string = req.body.name 
     const category: string = req.body.category
     if (itemId) {
-        // If 
         ListItem.create({
             listId: listId,
             itemId: itemId

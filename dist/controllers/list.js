@@ -68,7 +68,6 @@ const insertIntoList = (req, res, next) => {
     const itemName = req.body.name;
     const category = req.body.category;
     if (itemId) {
-        // If 
         listItem_1.default.create({
             listId: listId,
             itemId: itemId

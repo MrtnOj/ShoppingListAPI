@@ -27,7 +27,7 @@ const getListDetails = (req, res, next) => {
         }
     })
         .then(list => {
-        return res.json(list);
+        res.json(list);
     })
         .catch(err => {
         console.log(err);
@@ -53,7 +53,10 @@ const saveList = (req, res, next) => {
             })
                 .then(response => {
                 console.log(res);
-                res.send(response);
+                res.json(response);
+            })
+                .catch(err => {
+                console.log(err);
             });
         });
     })
@@ -66,7 +69,7 @@ const deleteList = (req, res, next) => {
     const listId = parseInt(req.params.listId);
     list_1.default.destroy({ where: { id: listId } })
         .then(response => {
-        res.send(response);
+        res.json(response);
     })
         .catch(err => {
         console.log(err);

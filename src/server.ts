@@ -38,12 +38,6 @@ User.hasMany(List)
 List.belongsToMany(Item, { through: ListItem})
 Item.belongsToMany(List, { through: ListItem})
 
-// ListItem.belongsTo(List)
-// List.hasMany(ListItem)
-
-// ListItem.belongsTo(Item)
-// Item.hasMany(ListItem)
-
 
 sequelize.sync(
     { alter: true }

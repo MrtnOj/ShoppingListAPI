@@ -1,7 +1,7 @@
 import List from '../models/list'
 import ListItem from '../models/listItem'
 import Item from '../models/item'
-import { Request, Response, NextFunction, response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ListAttributes } from '../models/list'
 import { ItemInterface } from '../models/item'
 import Category from '../models/category'
@@ -25,7 +25,7 @@ export const getListDetails = (req: Request, res: Response, next: NextFunction) 
         }
     })
     .then(list => {
-        return res.json(list)
+        res.json(list)
     })
     .catch(err => {
         console.log(err)
@@ -51,7 +51,10 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
             })
             .then(response => {
                 console.log(res)
-                res.send(response)
+                res.json(response)
+            })
+            .catch(err => {
+                console.log(err)
             })
         })
     })
@@ -64,7 +67,7 @@ export const deleteList = (req: Request, res: Response, next: NextFunction) => {
     const listId: number = parseInt(req.params.listId)
     List.destroy({ where: { id: listId }})
     .then(response => {
-        res.send(response)
+        res.json(response)
     })
     .catch(err => {
         console.log(err)

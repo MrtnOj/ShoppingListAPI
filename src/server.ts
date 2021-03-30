@@ -9,9 +9,11 @@ import Item from './models/item'
 import Category from './models/category'
 import User from './models/user'
 import List from './models/list'
+import ListItem from './models/listItem'
+import UserItem from './models/userItem'
+import UserCategory from './models/userCategory'
 
 import sequelize from './util/database'
-import ListItem from './models/listItem'
 
 const app = express()
 
@@ -31,6 +33,12 @@ app.use('/list', listRoutes)
 
 Item.belongsTo(Category)
 Category.hasMany(Item)
+
+UserItem.belongsTo(User)
+UserCategory.belongsTo(User)
+
+UserItem.belongsTo(UserCategory)
+UserCategory.hasMany(UserItem)
 
 List.belongsTo(User)
 User.hasMany(List)

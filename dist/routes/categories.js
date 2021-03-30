@@ -4,5 +4,7 @@ const express_1 = require("express");
 const categories_1 = require("../controllers/categories");
 const router = express_1.Router();
 router.get('/', categories_1.getCategories);
+router.get('/:userId', categories_1.getUserCategories);
 router.post('/', categories_1.createCategory);
+router.post('/:userId', categories_1.createUserCategory);
 exports.default = router;

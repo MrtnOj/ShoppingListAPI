@@ -3,8 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createItem = exports.getItems = void 0;
+exports.createUserItem = exports.getUserItems = exports.getItems = void 0;
 const item_1 = __importDefault(require("../models/item"));
+const userItem_1 = __importDefault(require("../models/userItem"));
+const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getItems = (req, res, next) => {
     item_1.default.findAll()
         .then(result => {
@@ -16,23 +18,70 @@ const getItems = (req, res, next) => {
     });
 };
 exports.getItems = getItems;
-const createItem = (req, res, next) => {
-    const name = req.body.name;
-    const categoryId = req.body.categoryId;
-    const lasts = req.body.lasts;
-    const lastBought = req.body.lastBought;
-    item_1.default.create({
-        name: name,
-        categoryId: categoryId,
-        lasts: lasts,
-        last_bought: lastBought
-    })
+const getUserItems = (req, res, next) => {
+    const userId = req.params.userId;
+    userItem_1.default.findAll({ where: { userId: userId } })
         .then(result => {
-        res.send(result);
+        res.json(result);
         console.log(result);
     })
         .catch(err => {
         console.log(err);
     });
 };
-exports.createItem = createItem;
+exports.getUserItems = getUserItems;
+const createUserItem = (req, res, next) => {
+    const userId = req.params.userId;
+    const name = req.body.name;
+    const categoryId = req.body.categoryId;
+    const categoryName = req.body.categoryName;
+    const lasts = req.body.lasts;
+    if (categoryId) {
+        userItem_1.default.create({
+            name: name,
+            userId: userId,
+            userCategoryId: categoryId,
+            lasts: lasts
+        })
+            .then(result => {
+            res.send(result);
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else if (!categoryId && categoryName && categoryName !== '') {
+        userCategory_1.default.create({
+            name: categoryName,
+            userId: userId
+        })
+            .then(category => {
+            userItem_1.default.create({
+                name: name,
+                userId: userId,
+                userCategoryId: category.get('id')
+            })
+                .then(result => {
+                res.send(result);
+            });
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else {
+        userItem_1.default.create({
+            name: name,
+            userId: userId,
+            lasts: lasts,
+            userCategoryId: null
+        })
+            .then(result => {
+            res.send(result);
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+};
+exports.createUserItem = createUserItem;

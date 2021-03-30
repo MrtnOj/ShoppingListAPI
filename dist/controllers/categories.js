@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCategory = exports.getCategories = void 0;
+exports.createUserCategory = exports.createCategory = exports.getUserCategories = exports.getCategories = void 0;
 const category_1 = __importDefault(require("../models/category"));
+const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getCategories = (req, res, next) => {
     category_1.default.findAll()
         .then(result => {
@@ -16,6 +17,18 @@ const getCategories = (req, res, next) => {
     });
 };
 exports.getCategories = getCategories;
+const getUserCategories = (req, res, next) => {
+    const userId = req.params.userId;
+    userCategory_1.default.findAll({ where: { userId: userId } })
+        .then(result => {
+        res.json(result);
+        console.log(result);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.getUserCategories = getUserCategories;
 const createCategory = (req, res, next) => {
     const name = req.body.name;
     category_1.default.create({
@@ -30,3 +43,18 @@ const createCategory = (req, res, next) => {
     });
 };
 exports.createCategory = createCategory;
+const createUserCategory = (req, res, next) => {
+    const userId = req.params.userId;
+    const name = req.body.name;
+    userCategory_1.default.create({
+        name: name,
+        userId: userId
+    })
+        .then(result => {
+        res.json(result);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.createUserCategory = createUserCategory;

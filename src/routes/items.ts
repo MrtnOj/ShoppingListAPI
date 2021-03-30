@@ -1,11 +1,13 @@
 import { Router } from 'express'
 
-import { getItems, createItem } from '../controllers/items'
+import { getItems, getUserItems, createUserItem } from '../controllers/items'
 
 const router = Router()
 
 router.get('/', getItems)
 
-router.post('/', createItem)
+router.post('/:userId', createUserItem)
+
+router.get('/:userId', getUserItems)
 
 export default router

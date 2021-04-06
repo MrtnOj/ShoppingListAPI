@@ -3,6 +3,7 @@ import db from '../util/database'
 
 export interface UserItemAttributes extends Model {
     id: number;
+    name: string;
     lasts: Date;
     lastBought: Date;
     createdAt: Date;

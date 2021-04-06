@@ -37,8 +37,8 @@ userItem_1.default.belongsTo(userCategory_1.default);
 userCategory_1.default.hasMany(userItem_1.default);
 list_2.default.belongsTo(user_1.default);
 user_1.default.hasMany(list_2.default);
-list_2.default.belongsToMany(item_1.default, { through: listItem_1.default });
-item_1.default.belongsToMany(list_2.default, { through: listItem_1.default });
+list_2.default.belongsToMany(userItem_1.default, { through: listItem_1.default });
+userItem_1.default.belongsToMany(list_2.default, { through: listItem_1.default });
 database_1.default.sync({ alter: true })
     .then(result => {
     console.log(result);

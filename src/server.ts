@@ -43,8 +43,8 @@ UserCategory.hasMany(UserItem)
 List.belongsTo(User)
 User.hasMany(List)
 
-List.belongsToMany(Item, { through: ListItem})
-Item.belongsToMany(List, { through: ListItem})
+List.belongsToMany(UserItem, { through: ListItem})
+UserItem.belongsToMany(List, { through: ListItem})
 
 
 sequelize.sync(

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertIntoList = exports.deleteList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
 const list_1 = __importDefault(require("../models/list"));
 const listItem_1 = __importDefault(require("../models/listItem"));
+const userItem_1 = __importDefault(require("../models/userItem"));
 const item_1 = __importDefault(require("../models/item"));
 const category_1 = __importDefault(require("../models/category"));
 const getUserLists = (req, res, next) => {
@@ -23,7 +24,7 @@ const getListDetails = (req, res, next) => {
     const listId = parseInt(req.params.listId);
     list_1.default.findOne({ where: { id: listId },
         include: {
-            model: item_1.default
+            model: userItem_1.default
         }
     })
         .then(list => {
@@ -45,11 +46,24 @@ const saveList = (req, res, next) => {
     list_1.default.create({
         userId: userId
     })
-        .then(result => {
+        .then((result) => {
+        // const addListItems = list.map((listItem: ItemInterface) => {
+        //     ListItem.create({
+        //         listId: result.id,
+        //         itemId: listItem.id
+        //     })
+        // })
+        // Promise.all(addListItems)
+        // .then(values => {
+        //     console.log(values)
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
         list.forEach((listItem) => {
             listItem_1.default.create({
                 listId: result.id,
-                itemId: listItem.id
+                userItemId: listItem.id
             })
                 .then(response => {
                 console.log(res);

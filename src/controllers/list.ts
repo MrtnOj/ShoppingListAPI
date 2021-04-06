@@ -1,5 +1,6 @@
 import List from '../models/list'
 import ListItem from '../models/listItem'
+import UserItem from '../models/userItem'
 import Item from '../models/item'
 import { Request, Response, NextFunction } from 'express'
 import { ListAttributes } from '../models/list'
@@ -21,7 +22,7 @@ export const getListDetails = (req: Request, res: Response, next: NextFunction) 
     const listId = parseInt(req.params.listId)
     List.findOne({ where: { id: listId }, 
         include: {
-            model: Item
+            model: UserItem
         }
     })
     .then(list => {
@@ -43,11 +44,24 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
     List.create({
         userId: userId
     })
-    .then(result => {
-        list.forEach((listItem: ItemInterface) => {
+    .then((result: any) => {
+        // const addListItems = list.map((listItem: ItemInterface) => {
+        //     ListItem.create({
+        //         listId: result.id,
+        //         itemId: listItem.id
+        //     })
+        // })
+        // Promise.all(addListItems)
+        // .then(values => {
+        //     console.log(values)
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
+        list.forEach((listItem: any) => {
             ListItem.create({
                 listId: result.id,
-                itemId: listItem.id
+                userItemId: listItem.id
             })
             .then(response => {
                 console.log(res)

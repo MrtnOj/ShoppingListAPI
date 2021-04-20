@@ -94,7 +94,9 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
     .catch(err => {
         console.log(err)
     })
-    res.json(itemBuyHistory)
+    setTimeout(() => {
+        res.json(itemBuyHistory)
+    }, 3000)
 }
 
 export const createUserItem = (req: Request, res: Response, next: NextFunction) => {

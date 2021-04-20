@@ -92,7 +92,9 @@ const getSuggestions = (req, res, next) => {
         .catch(err => {
         console.log(err);
     });
-    res.json(itemBuyHistory);
+    setTimeout(() => {
+        res.json(itemBuyHistory);
+    }, 3000);
 };
 exports.getSuggestions = getSuggestions;
 const createUserItem = (req, res, next) => {

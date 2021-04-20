@@ -36,6 +36,7 @@ export const getListDetails = (req: Request, res: Response, next: NextFunction) 
 export const saveList = (req: Request, res: Response, next: NextFunction) => {
     const list: ItemInterface[] = req.body.list
     const userId: number = req.body.userId
+    let result = 'List created successfully'
     if (list.length < 1) {
         return res.status(400).json({
             error: 'Empty list you fucknut'
@@ -44,20 +45,21 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
     List.create({
         userId: userId
     })
-    .then((result: any) => {
+    .then((createdList: any) => {
         list.forEach((listItem: any) => {
             ListItem.create({
-                listId: result.id,
+                listId: createdList.id,
                 userItemId: listItem.id
             })
             .then(response => {
-                console.log(res)
-                res.json(response)
+                console.log(response)
             })
             .catch(err => {
                 console.log(err)
+                result = `Error saving list, item ID: ${listItem.id}`
             })
         })
+        res.json(result)
     })
     .catch(err => {
         console.log(err)

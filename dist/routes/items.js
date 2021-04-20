@@ -6,5 +6,6 @@ const router = express_1.Router();
 router.get('/', items_1.getItems);
 router.post('/:userId', items_1.createUserItem);
 router.put('/bought', items_1.itemsBought);
+router.get('/suggestions', items_1.getSuggestions);
 router.get('/:userId', items_1.getUserItems);
 exports.default = router;

@@ -12,6 +12,7 @@ import List from './models/list'
 import ListItem from './models/listItem'
 import UserItem from './models/userItem'
 import UserCategory from './models/userCategory'
+import ItemBought from './models/itemBought'
 
 import sequelize from './util/database'
 
@@ -45,6 +46,12 @@ User.hasMany(List)
 
 List.belongsToMany(UserItem, { through: ListItem})
 UserItem.belongsToMany(List, { through: ListItem})
+
+ItemBought.belongsTo(UserItem)
+UserItem.hasMany(ItemBought)
+
+ItemBought.belongsTo(User)
+User.hasMany(ItemBought)
 
 
 sequelize.sync(

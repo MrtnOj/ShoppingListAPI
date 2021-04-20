@@ -47,19 +47,6 @@ const saveList = (req, res, next) => {
         userId: userId
     })
         .then((result) => {
-        // const addListItems = list.map((listItem: ItemInterface) => {
-        //     ListItem.create({
-        //         listId: result.id,
-        //         itemId: listItem.id
-        //     })
-        // })
-        // Promise.all(addListItems)
-        // .then(values => {
-        //     console.log(values)
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
         list.forEach((listItem) => {
             listItem_1.default.create({
                 listId: result.id,

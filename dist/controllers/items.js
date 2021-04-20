@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserItem = exports.getUserItems = exports.getItems = void 0;
+exports.createUserItem = exports.itemsBought = exports.getUserItems = exports.getItems = void 0;
 const item_1 = __importDefault(require("../models/item"));
 const userItem_1 = __importDefault(require("../models/userItem"));
 const userCategory_1 = __importDefault(require("../models/userCategory"));
@@ -30,6 +30,23 @@ const getUserItems = (req, res, next) => {
     });
 };
 exports.getUserItems = getUserItems;
+const itemsBought = (req, res, next) => {
+    const items = req.body.items;
+    const date = new Date();
+    let result = 'Bought dates updated';
+    items.forEach((item) => {
+        userItem_1.default.update({ lastBought: date }, { where: { id: item.id } })
+            .then(result => {
+            console.log(`Updated successfully item id: ${item.id}`);
+        })
+            .catch(err => {
+            console.log(err);
+            result = `Updating failed for item with id ${item.id}`;
+        });
+    });
+    res.send(result);
+};
+exports.itemsBought = itemsBought;
 const createUserItem = (req, res, next) => {
     const userId = req.params.userId;
     const name = req.body.name;

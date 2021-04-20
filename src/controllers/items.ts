@@ -1,7 +1,5 @@
 import { ItemInterface } from '../models/item'
-
 import Item from '../models/item'
-
 import { Request, Response, NextFunction } from 'express'
 import UserItem from '../models/userItem'
 import Category from '../models/category'
@@ -28,6 +26,23 @@ export const getUserItems = (req: Request, res: Response, next: NextFunction) =>
     .catch(err => {
         console.log(err)
     })
+}
+
+export const itemsBought = (req: Request, res: Response, next: NextFunction) => {
+    const items = req.body.items
+    const date = new Date()
+    let result = 'Bought dates updated'
+    items.forEach((item: ItemInterface) => {
+        UserItem.update({ lastBought: date }, { where: { id: item.id } })
+        .then(result => {
+            console.log(`Updated successfully item id: ${item.id}`)
+        })
+        .catch(err => {
+            console.log(err)
+            result = `Updating failed for item with id ${item.id}`
+        })
+    })
+    res.send(result)
 }
 
 export const createUserItem = (req: Request, res: Response, next: NextFunction) => {

@@ -10,7 +10,7 @@ router.post('/:userId', createUserItem)
 
 router.put('/bought', itemsBought)
 
-router.get('/suggestions', getSuggestions)
+router.get('/suggestions/:userId', getSuggestions)
 
 router.get('/:userId', getUserItems)
 

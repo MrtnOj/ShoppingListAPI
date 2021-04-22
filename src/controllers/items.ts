@@ -1,10 +1,16 @@
 import { ItemInterface } from '../models/item'
+import { UserItemAttributes } from '../models/userItem'
 import Item from '../models/item'
 import { Request, Response, NextFunction } from 'express'
 import UserItem from '../models/userItem'
-import Category from '../models/category'
+import suggestionsCalculator from '../util/suggestionsCalculator'
 import ItemBought from '../models/itemBought'
 import UserCategory from '../models/userCategory'
+
+export interface BuyHistory {
+    item: UserItemAttributes,
+    boughtDates: Date[]
+}
 
 export const getItems = (req: Request, res: Response, next: NextFunction) => {
     Item.findAll()
@@ -62,18 +68,14 @@ export const itemsBought = (req: Request, res: Response, next: NextFunction) => 
 }
 
 export const getSuggestions = (req: Request, res: Response, next: NextFunction) => {
-    interface BuyHistory {
-        id: number,
-        boughtDates: Date[]
-    }
-    const userId = req.body.userId
+    const userId = req.params.userId
     const date = new Date()
     let itemBuyHistory: BuyHistory[] = []
     UserItem.findAll({ where: {userId: userId}})
     .then(items => {
         items.forEach(item => {
             ItemBought.findAll({
-                // limit: 5,
+                limit: 5,
                 where: {
                     userItemId: item.id
                 },
@@ -82,8 +84,7 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
             .then(boughtData => {
                 if (boughtData) {
                     const buyDates = boughtData.map(data => data.bought)
-                    console.log(buyDates)
-                    itemBuyHistory.push({id: item.id, boughtDates: buyDates})
+                    itemBuyHistory.push({item: item, boughtDates: buyDates})
                 }
             })
             .catch(err => {
@@ -95,8 +96,11 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
         console.log(err)
     })
     setTimeout(() => {
-        res.json(itemBuyHistory)
-    }, 3000)
+        const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
+        const suggestions = suggestionsCalculator(filteredBuyHistory)
+        res.json(suggestions)
+    }, 2000)
+
 }
 
 export const createUserItem = (req: Request, res: Response, next: NextFunction) => {

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserItem = exports.getSuggestions = exports.itemsBought = exports.getUserItems = exports.getItems = void 0;
 const item_1 = __importDefault(require("../models/item"));
 const userItem_1 = __importDefault(require("../models/userItem"));
+const suggestionsCalculator_1 = __importDefault(require("../util/suggestionsCalculator"));
 const itemBought_1 = __importDefault(require("../models/itemBought"));
 const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getItems = (req, res, next) => {
@@ -64,14 +65,14 @@ const itemsBought = (req, res, next) => {
 };
 exports.itemsBought = itemsBought;
 const getSuggestions = (req, res, next) => {
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     const date = new Date();
     let itemBuyHistory = [];
     userItem_1.default.findAll({ where: { userId: userId } })
         .then(items => {
         items.forEach(item => {
             itemBought_1.default.findAll({
-                // limit: 5,
+                limit: 5,
                 where: {
                     userItemId: item.id
                 },
@@ -80,8 +81,7 @@ const getSuggestions = (req, res, next) => {
                 .then(boughtData => {
                 if (boughtData) {
                     const buyDates = boughtData.map(data => data.bought);
-                    console.log(buyDates);
-                    itemBuyHistory.push({ id: item.id, boughtDates: buyDates });
+                    itemBuyHistory.push({ item: item, boughtDates: buyDates });
                 }
             })
                 .catch(err => {
@@ -93,8 +93,10 @@ const getSuggestions = (req, res, next) => {
         console.log(err);
     });
     setTimeout(() => {
-        res.json(itemBuyHistory);
-    }, 3000);
+        const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1);
+        const suggestions = suggestionsCalculator_1.default(filteredBuyHistory);
+        res.json(suggestions);
+    }, 2000);
 };
 exports.getSuggestions = getSuggestions;
 const createUserItem = (req, res, next) => {

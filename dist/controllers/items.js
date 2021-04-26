@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserItem = exports.getSuggestions = exports.itemsBought = exports.getUserItems = exports.getItems = void 0;
+exports.deleteUserItem = exports.createUserItem = exports.itemsBought = exports.getSuggestions = exports.getUserItems = exports.getItems = void 0;
 const item_1 = __importDefault(require("../models/item"));
 const userItem_1 = __importDefault(require("../models/userItem"));
 const suggestionsCalculator_1 = __importDefault(require("../util/suggestionsCalculator"));
@@ -32,41 +32,8 @@ const getUserItems = (req, res, next) => {
     });
 };
 exports.getUserItems = getUserItems;
-const itemsBought = (req, res, next) => {
-    const items = req.body.items;
-    const userId = req.body.userId;
-    const date = new Date();
-    let result = 'Bought dates updated';
-    items.forEach((item) => {
-        itemBought_1.default.create({
-            userId: userId,
-            userItemId: item.id,
-            bought: date
-        })
-            .then(result => {
-            console.log(`Item bought ID: ${item.id}`);
-        })
-            .catch(err => {
-            console.log(err);
-            result = `Updating failed for item with id ${item.id}`;
-        });
-    });
-    // items.forEach((item: ItemInterface) => {
-    //     UserItem.update({ lastBought: date }, { where: { id: item.id } })
-    //     .then(result => {
-    //         console.log(`Updated successfully item id: ${item.id}`)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //         result = `Updating failed for item with id ${item.id}`
-    //     })
-    // })
-    res.send(result);
-};
-exports.itemsBought = itemsBought;
 const getSuggestions = (req, res, next) => {
     const userId = req.params.userId;
-    const date = new Date();
     let itemBuyHistory = [];
     userItem_1.default.findAll({ where: { userId: userId } })
         .then(items => {
@@ -99,6 +66,28 @@ const getSuggestions = (req, res, next) => {
     }, 2000);
 };
 exports.getSuggestions = getSuggestions;
+const itemsBought = (req, res, next) => {
+    const items = req.body.items;
+    const userId = req.body.userId;
+    const date = new Date();
+    let result = 'Bought dates updated';
+    items.forEach((item) => {
+        itemBought_1.default.create({
+            userId: userId,
+            userItemId: item.id,
+            bought: date
+        })
+            .then(result => {
+            console.log(`Item bought ID: ${item.id}`);
+        })
+            .catch(err => {
+            console.log(err);
+            result = `Updating failed for item with id ${item.id}`;
+        });
+    });
+    res.send(result);
+};
+exports.itemsBought = itemsBought;
 const createUserItem = (req, res, next) => {
     const userId = req.params.userId;
     const name = req.body.name;
@@ -154,3 +143,14 @@ const createUserItem = (req, res, next) => {
     }
 };
 exports.createUserItem = createUserItem;
+const deleteUserItem = (req, res, next) => {
+    const itemId = parseInt(req.params.itemId);
+    userItem_1.default.destroy({ where: { id: itemId } })
+        .then(response => {
+        res.json(response);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.deleteUserItem = deleteUserItem;

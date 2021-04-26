@@ -35,41 +35,8 @@ export const getUserItems = (req: Request, res: Response, next: NextFunction) =>
     })
 }
 
-export const itemsBought = (req: Request, res: Response, next: NextFunction) => {
-    const items = req.body.items
-    const userId = req.body.userId
-    const date = new Date()
-    let result = 'Bought dates updated'
-    items.forEach((item: ItemInterface) => {
-        ItemBought.create({
-            userId: userId,
-            userItemId: item.id,
-            bought: date
-        })
-        .then(result => {
-            console.log(`Item bought ID: ${item.id}`)
-        })
-        .catch(err => {
-            console.log(err)
-            result= `Updating failed for item with id ${item.id}`
-        })
-    })
-    // items.forEach((item: ItemInterface) => {
-    //     UserItem.update({ lastBought: date }, { where: { id: item.id } })
-    //     .then(result => {
-    //         console.log(`Updated successfully item id: ${item.id}`)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //         result = `Updating failed for item with id ${item.id}`
-    //     })
-    // })
-    res.send(result)
-}
-
 export const getSuggestions = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
-    const date = new Date()
     let itemBuyHistory: BuyHistory[] = []
     UserItem.findAll({ where: {userId: userId}})
     .then(items => {
@@ -101,6 +68,28 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
         res.json(suggestions)
     }, 2000)
 
+}
+
+export const itemsBought = (req: Request, res: Response, next: NextFunction) => {
+    const items = req.body.items
+    const userId = req.body.userId
+    const date = new Date()
+    let result = 'Bought dates updated'
+    items.forEach((item: ItemInterface) => {
+        ItemBought.create({
+            userId: userId,
+            userItemId: item.id,
+            bought: date
+        })
+        .then(result => {
+            console.log(`Item bought ID: ${item.id}`)
+        })
+        .catch(err => {
+            console.log(err)
+            result= `Updating failed for item with id ${item.id}`
+        })
+    })
+    res.send(result)
 }
 
 export const createUserItem = (req: Request, res: Response, next: NextFunction) => {
@@ -155,4 +144,15 @@ export const createUserItem = (req: Request, res: Response, next: NextFunction) 
             console.log(err)
         })
     }
+}
+
+export const deleteUserItem = (req: Request, res: Response, next: NextFunction) => {
+    const itemId: number = parseInt(req.params.itemId)
+    UserItem.destroy({ where: { id: itemId }})
+    .then(response => {
+        res.json(response)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 }

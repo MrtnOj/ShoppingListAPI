@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { getCategories, createCategory, getUserCategories, createUserCategory } from '../controllers/categories'
+import { getCategories, createCategory, getUserCategories, createUserCategory, deleteUserCategory } from '../controllers/categories'
 
 const router = Router()
 
@@ -11,5 +11,7 @@ router.get('/:userId', getUserCategories)
 router.post('/', createCategory)
 
 router.post('/:userId', createUserCategory)
+
+router.delete('/:categoryId', deleteUserCategory)
 
 export default router

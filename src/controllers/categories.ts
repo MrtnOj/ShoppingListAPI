@@ -55,3 +55,14 @@ export const createUserCategory = (req: Request, res: Response, next: NextFuncti
         console.log(err)
     })
 }
+
+export const deleteUserCategory = (req: Request, res: Response, next: NextFunction) => {
+    const categoryId = req.params.categoryId
+    UserCategory.destroy({ where: { id: categoryId }})
+    .then(result => {
+        res.json(result)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}

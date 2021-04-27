@@ -1,6 +1,14 @@
 import { Router } from 'express'
 
-import { getItems, getUserItems, createUserItem, itemsBought, getSuggestions, deleteUserItem } from '../controllers/items'
+import { 
+    getItems,
+    getUserItems,
+    createUserItem,
+    itemsBought,
+    getSuggestions,
+    deleteUserItem,
+    editUserItem
+} from '../controllers/items'
 
 const router = Router()
 
@@ -10,7 +18,9 @@ router.post('/:userId', createUserItem)
 
 router.delete('/:itemId', deleteUserItem)
 
-router.put('/bought', itemsBought)
+router.put('/:itemId', editUserItem)
+
+router.post('/bought', itemsBought)
 
 router.get('/suggestions/:userId', getSuggestions)
 

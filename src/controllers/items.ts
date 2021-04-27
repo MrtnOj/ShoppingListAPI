@@ -6,6 +6,7 @@ import UserItem from '../models/userItem'
 import suggestionsCalculator from '../util/suggestionsCalculator'
 import ItemBought from '../models/itemBought'
 import UserCategory from '../models/userCategory'
+import { CategoryAttributes } from '../models/category'
 
 export interface BuyHistory {
     item: UserItemAttributes,
@@ -139,6 +140,45 @@ export const createUserItem = (req: Request, res: Response, next: NextFunction) 
         })
         .then(result => {
             res.send(result)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
+
+export const editUserItem = (req: Request, res: Response, next: NextFunction) => {
+    const itemId = parseInt(req.params.itemId)
+    const userId = req.body.userId
+    const newName = req.body.itemName
+    const categoryId = req.body.category.id
+    const categoryName = typeof(req.body.category === 'string') ? req.body.category : null
+    if (categoryId) {
+        UserItem.update({ name: newName, userCategoryId: categoryId }, { where: { id: itemId }})
+        .then(updatedItem => {
+            res.json(updatedItem)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } else if (!categoryId && categoryName && categoryName !== '') {
+        UserCategory.create({
+            name: categoryName,
+            userId: userId
+        })
+        .then(category => {
+            UserItem.update({ name: newName, userCategoryId: category.get('id') }, { where: { id: itemId }})
+            .then(result => {
+                res.send(result)
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } else {
+        UserItem.update({name: newName, userCategoryId: null }, { where: { id: itemId }})
+        .then(updatedItem => {
+            res.json(updatedItem)
         })
         .catch(err => {
             console.log(err)

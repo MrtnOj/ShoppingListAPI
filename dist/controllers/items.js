@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserItem = exports.createUserItem = exports.itemsBought = exports.getSuggestions = exports.getUserItems = exports.getItems = void 0;
+exports.deleteUserItem = exports.editUserItem = exports.createUserItem = exports.itemsBought = exports.getSuggestions = exports.getUserItems = exports.getItems = void 0;
 const item_1 = __importDefault(require("../models/item"));
 const userItem_1 = __importDefault(require("../models/userItem"));
 const suggestionsCalculator_1 = __importDefault(require("../util/suggestionsCalculator"));
@@ -143,6 +143,47 @@ const createUserItem = (req, res, next) => {
     }
 };
 exports.createUserItem = createUserItem;
+const editUserItem = (req, res, next) => {
+    const itemId = parseInt(req.params.itemId);
+    const userId = req.body.userId;
+    const newName = req.body.itemName;
+    const categoryId = req.body.category.id;
+    const categoryName = typeof (req.body.category === 'string') ? req.body.category : null;
+    if (categoryId) {
+        userItem_1.default.update({ name: newName, userCategoryId: categoryId }, { where: { id: itemId } })
+            .then(updatedItem => {
+            res.json(updatedItem);
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else if (!categoryId && categoryName && categoryName !== '') {
+        userCategory_1.default.create({
+            name: categoryName,
+            userId: userId
+        })
+            .then(category => {
+            userItem_1.default.update({ name: newName, userCategoryId: category.get('id') }, { where: { id: itemId } })
+                .then(result => {
+                res.send(result);
+            });
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+    else {
+        userItem_1.default.update({ name: newName, userCategoryId: null }, { where: { id: itemId } })
+            .then(updatedItem => {
+            res.json(updatedItem);
+        })
+            .catch(err => {
+            console.log(err);
+        });
+    }
+};
+exports.editUserItem = editUserItem;
 const deleteUserItem = (req, res, next) => {
     const itemId = parseInt(req.params.itemId);
     userItem_1.default.destroy({ where: { id: itemId } })

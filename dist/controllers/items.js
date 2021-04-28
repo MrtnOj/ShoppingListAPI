@@ -146,7 +146,7 @@ exports.createUserItem = createUserItem;
 const editUserItem = (req, res, next) => {
     const itemId = parseInt(req.params.itemId);
     const userId = req.body.userId;
-    const newName = req.body.itemName;
+    const newName = req.body.newName;
     const categoryId = req.body.category.id;
     const categoryName = typeof (req.body.category === 'string') ? req.body.category : null;
     if (categoryId) {

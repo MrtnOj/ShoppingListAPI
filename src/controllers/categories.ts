@@ -56,6 +56,18 @@ export const createUserCategory = (req: Request, res: Response, next: NextFuncti
     })
 }
 
+export const editUserCategory = (req: Request, res: Response, next: NextFunction) => {
+    const categoryId = parseInt(req.params.categoryId)
+    const newName = req.body.newCategoryName
+    UserCategory.update({ name: newName }, {where: { id: categoryId }})
+    .then(newCategory => {
+        res.json(newCategory)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 export const deleteUserCategory = (req: Request, res: Response, next: NextFunction) => {
     const categoryId = req.params.categoryId
     UserCategory.destroy({ where: { id: categoryId }})

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserCategory = exports.createUserCategory = exports.createCategory = exports.getUserCategories = exports.getCategories = void 0;
+exports.deleteUserCategory = exports.editUserCategory = exports.createUserCategory = exports.createCategory = exports.getUserCategories = exports.getCategories = void 0;
 const category_1 = __importDefault(require("../models/category"));
 const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getCategories = (req, res, next) => {
@@ -58,6 +58,18 @@ const createUserCategory = (req, res, next) => {
     });
 };
 exports.createUserCategory = createUserCategory;
+const editUserCategory = (req, res, next) => {
+    const categoryId = parseInt(req.params.categoryId);
+    const newName = req.body.newCategoryName;
+    userCategory_1.default.update({ name: newName }, { where: { id: categoryId } })
+        .then(newCategory => {
+        res.json(newCategory);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.editUserCategory = editUserCategory;
 const deleteUserCategory = (req, res, next) => {
     const categoryId = req.params.categoryId;
     userCategory_1.default.destroy({ where: { id: categoryId } })

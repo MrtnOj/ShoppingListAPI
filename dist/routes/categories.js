@@ -7,5 +7,6 @@ router.get('/', categories_1.getCategories);
 router.get('/:userId', categories_1.getUserCategories);
 router.post('/', categories_1.createCategory);
 router.post('/:userId', categories_1.createUserCategory);
+router.put('/:categoryId', categories_1.editUserCategory);
 router.delete('/:categoryId', categories_1.deleteUserCategory);
 exports.default = router;

@@ -6,6 +6,7 @@ import { Request, Response, NextFunction } from 'express'
 import { ListAttributes } from '../models/list'
 import { ItemInterface } from '../models/item'
 import Category from '../models/category'
+import UserCategory from '../models/userCategory'
 
 export const getUserLists = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
@@ -94,30 +95,30 @@ export const insertIntoList = (req: Request, res: Response, next: NextFunction) 
             console.log(err)
         })
     } else if (!itemId && category !== '') {
-        Category.findOne({ where: { name: category }})
+        UserCategory.findOne({ where: { name: category }})
         .then(cat => {
             if (cat) {
-                Item.create({
+                UserItem.create({
                     name: itemName,
-                    categoryId: cat.get('id')
+                    userCategoryId: cat.get('id')
                 })
                 .then(item => {
                     ListItem.create({
                         listId: listId,
-                        itemId: item.get('id')
+                        userItemId: item.get('id')
                     })
                     .then(response => {
                         res.send(response)
                     })
                 })
             } else {
-                Category.create({
+                UserCategory.create({
                     name: category
                 })
                 .then(category => {
-                    Item.create({
+                    UserItem.create({
                         name: itemName,
-                        categoryId: category.get('id')
+                        userCategoryId: category.get('id')
                     })
                     .then(item => {
                         ListItem.create({
@@ -135,13 +136,13 @@ export const insertIntoList = (req: Request, res: Response, next: NextFunction) 
             console.log(err)
         })
     } else if (!itemId && category === '') {
-        Item.create({
+        UserItem.create({
             name: itemName
         })
         .then(item => {
             ListItem.create({
                 listId: listId,
-                itemId: item.get('id')
+                userItemId: item.get('id')
             })
             .then(response => {
                 res.send(response)

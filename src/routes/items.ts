@@ -21,7 +21,7 @@ router.delete('/:itemId', isAuth, deleteUserItem)
 
 router.put('/:itemId', isAuth, editUserItem)
 
-router.post('/bought', itemsBought)
+router.post('/bought/:userId', isAuth, itemsBought)
 
 router.get('/suggestions/:userId', isAuth, getSuggestions)
 

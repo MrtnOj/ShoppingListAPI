@@ -38,10 +38,10 @@ export const getUserItems = (req: Request, res: Response, next: NextFunction) =>
     })
 }
 
-export const getSuggestions = async (req: Request, res: Response, next: NextFunction) => {
+export const getSuggestions = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
     let itemBuyHistory: BuyHistory[] = []
-    await UserItem.findAll({ where: {userId: userId}})
+    UserItem.findAll({ where: {userId: userId}})
     .then(items => {
         items.forEach(item => {
             ItemBought.findAll({
@@ -65,20 +65,17 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
     .catch(err => {
         console.log(err)
     })
-    const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
-    const suggestions = suggestionsCalculator(filteredBuyHistory)
-    res.json(suggestions)
-    // setTimeout(() => {
-    //     const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
-    //     const suggestions = suggestionsCalculator(filteredBuyHistory)
-    //     res.json(suggestions)
-    // }, 2000)
+    setTimeout(() => {
+        const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
+        const suggestions = suggestionsCalculator(filteredBuyHistory)
+        res.json(suggestions)
+    }, 2000)
 
 }
 
 export const itemsBought = (req: Request, res: Response, next: NextFunction) => {
     const items = req.body.items
-    const userId = req.body.userId
+    const userId = req.params.userId
     const date = new Date()
     let result = 'Bought dates updated'
     items.forEach((item: ItemInterface) => {
@@ -101,7 +98,7 @@ export const itemsBought = (req: Request, res: Response, next: NextFunction) => 
 export const createUserItem = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
     const name = req.body.name
-    const categoryId = req.body.category.id
+    const categoryId = req.body.category?.id
     const categoryName = typeof(req.body.category === 'string') ? req.body.category : null
     const lasts = req.body.lasts
 

@@ -7,8 +7,7 @@ exports.insertIntoList = exports.deleteList = exports.saveList = exports.getList
 const list_1 = __importDefault(require("../models/list"));
 const listItem_1 = __importDefault(require("../models/listItem"));
 const userItem_1 = __importDefault(require("../models/userItem"));
-const item_1 = __importDefault(require("../models/item"));
-const category_1 = __importDefault(require("../models/category"));
+const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getUserLists = (req, res, next) => {
     const userId = req.params.userId;
     list_1.default.findAll({ where: { userId: userId } })
@@ -97,17 +96,17 @@ const insertIntoList = (req, res, next) => {
         });
     }
     else if (!itemId && category !== '') {
-        category_1.default.findOne({ where: { name: category } })
+        userCategory_1.default.findOne({ where: { name: category } })
             .then(cat => {
             if (cat) {
-                item_1.default.create({
+                userItem_1.default.create({
                     name: itemName,
-                    categoryId: cat.get('id')
+                    userCategoryId: cat.get('id')
                 })
                     .then(item => {
                     listItem_1.default.create({
                         listId: listId,
-                        itemId: item.get('id')
+                        userItemId: item.get('id')
                     })
                         .then(response => {
                         res.send(response);
@@ -115,13 +114,13 @@ const insertIntoList = (req, res, next) => {
                 });
             }
             else {
-                category_1.default.create({
+                userCategory_1.default.create({
                     name: category
                 })
                     .then(category => {
-                    item_1.default.create({
+                    userItem_1.default.create({
                         name: itemName,
-                        categoryId: category.get('id')
+                        userCategoryId: category.get('id')
                     })
                         .then(item => {
                         listItem_1.default.create({
@@ -140,13 +139,13 @@ const insertIntoList = (req, res, next) => {
         });
     }
     else if (!itemId && category === '') {
-        item_1.default.create({
+        userItem_1.default.create({
             name: itemName
         })
             .then(item => {
             listItem_1.default.create({
                 listId: listId,
-                itemId: item.get('id')
+                userItemId: item.get('id')
             })
                 .then(response => {
                 res.send(response);

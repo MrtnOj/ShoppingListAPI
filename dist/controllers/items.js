@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -43,10 +34,10 @@ const getUserItems = (req, res, next) => {
     });
 };
 exports.getUserItems = getUserItems;
-const getSuggestions = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getSuggestions = (req, res, next) => {
     const userId = req.params.userId;
     let itemBuyHistory = [];
-    yield userItem_1.default.findAll({ where: { userId: userId } })
+    userItem_1.default.findAll({ where: { userId: userId } })
         .then(items => {
         items.forEach(item => {
             itemBought_1.default.findAll({
@@ -70,19 +61,16 @@ const getSuggestions = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         .catch(err => {
         console.log(err);
     });
-    const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1);
-    const suggestions = suggestionsCalculator_1.default(filteredBuyHistory);
-    res.json(suggestions);
-    // setTimeout(() => {
-    //     const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
-    //     const suggestions = suggestionsCalculator(filteredBuyHistory)
-    //     res.json(suggestions)
-    // }, 2000)
-});
+    setTimeout(() => {
+        const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1);
+        const suggestions = suggestionsCalculator_1.default(filteredBuyHistory);
+        res.json(suggestions);
+    }, 2000);
+};
 exports.getSuggestions = getSuggestions;
 const itemsBought = (req, res, next) => {
     const items = req.body.items;
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     const date = new Date();
     let result = 'Bought dates updated';
     items.forEach((item) => {
@@ -103,9 +91,10 @@ const itemsBought = (req, res, next) => {
 };
 exports.itemsBought = itemsBought;
 const createUserItem = (req, res, next) => {
+    var _a;
     const userId = req.params.userId;
     const name = req.body.name;
-    const categoryId = req.body.category.id;
+    const categoryId = (_a = req.body.category) === null || _a === void 0 ? void 0 : _a.id;
     const categoryName = typeof (req.body.category === 'string') ? req.body.category : null;
     const lasts = req.body.lasts;
     if (categoryId) {

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const items_1 = __importDefault(require("./routes/items"));
 const categories_1 = __importDefault(require("./routes/categories"));
 const auth_1 = __importDefault(require("./routes/auth"));
@@ -19,7 +18,7 @@ const userCategory_1 = __importDefault(require("./models/userCategory"));
 const itemBought_1 = __importDefault(require("./models/itemBought"));
 const database_1 = __importDefault(require("./util/database"));
 const app = express_1.default();
-app.use(body_parser_1.default.json());
+// app.use(bodyParser.json())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');

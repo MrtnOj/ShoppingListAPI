@@ -28,18 +28,20 @@ export const getUserItems = (req: Request, res: Response, next: NextFunction) =>
     const userId = req.params.userId
     UserItem.findAll({ where: { userId: userId }})
     .then(result => {
+        if (userId !== req.userId) {
+            return Promise.reject('You are not authorized for this, fuck off m8')
+        }
         res.json(result)
-        console.log(result)
     })
     .catch(err => {
         console.log(err)
     })
 }
 
-export const getSuggestions = (req: Request, res: Response, next: NextFunction) => {
+export const getSuggestions = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
     let itemBuyHistory: BuyHistory[] = []
-    UserItem.findAll({ where: {userId: userId}})
+    await UserItem.findAll({ where: {userId: userId}})
     .then(items => {
         items.forEach(item => {
             ItemBought.findAll({
@@ -63,11 +65,14 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
     .catch(err => {
         console.log(err)
     })
-    setTimeout(() => {
-        const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
-        const suggestions = suggestionsCalculator(filteredBuyHistory)
-        res.json(suggestions)
-    }, 2000)
+    const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
+    const suggestions = suggestionsCalculator(filteredBuyHistory)
+    res.json(suggestions)
+    // setTimeout(() => {
+    //     const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
+    //     const suggestions = suggestionsCalculator(filteredBuyHistory)
+    //     res.json(suggestions)
+    // }, 2000)
 
 }
 

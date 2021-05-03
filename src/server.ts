@@ -18,7 +18,7 @@ import sequelize from './util/database'
 
 const app = express()
 
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')

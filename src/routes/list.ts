@@ -1,18 +1,19 @@
 import { Router } from 'express'
 import List from '../models/list'
 import { saveList, getUserLists, getListDetails, insertIntoList, deleteList } from '../controllers/list'
+import isAuth from '../middleware/is-auth'
 
 
 const router = Router()
 
-router.get('/:userId', getUserLists)
+router.get('/:userId', isAuth, getUserLists)
 
-router.get('/listdetails/:listId', getListDetails)
+router.get('/listdetails/:listId', isAuth, getListDetails)
 
-router.post('/add/:listId', insertIntoList)
+router.post('/add/:listId', isAuth, insertIntoList)
 
-router.delete('/delete/:listId', deleteList)
+router.delete('/delete/:listId', isAuth, deleteList)
 
-router.post('/', saveList)
+router.post('/', isAuth, saveList)
 
 export default router

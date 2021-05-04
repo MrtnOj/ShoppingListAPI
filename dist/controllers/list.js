@@ -10,6 +10,9 @@ const userItem_1 = __importDefault(require("../models/userItem"));
 const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getUserLists = (req, res, next) => {
     const userId = req.params.userId;
+    if (userId !== req.userId) {
+        return;
+    }
     list_1.default.findAll({ where: { userId: userId } })
         .then(list => {
         return res.json(list);
@@ -21,6 +24,10 @@ const getUserLists = (req, res, next) => {
 exports.getUserLists = getUserLists;
 const getListDetails = (req, res, next) => {
     const listId = parseInt(req.params.listId);
+    const userId = req.query.userId;
+    if (userId !== req.userId) {
+        return;
+    }
     list_1.default.findOne({ where: { id: listId },
         include: {
             model: userItem_1.default
@@ -37,6 +44,9 @@ exports.getListDetails = getListDetails;
 const saveList = (req, res, next) => {
     const list = req.body.list;
     const userId = req.body.userId;
+    if (userId !== req.userId) {
+        return;
+    }
     let result = 'List created successfully';
     if (list.length < 1) {
         return res.status(400).json({
@@ -69,6 +79,10 @@ const saveList = (req, res, next) => {
 exports.saveList = saveList;
 const deleteList = (req, res, next) => {
     const listId = parseInt(req.params.listId);
+    const userId = req.query.userId;
+    if (userId !== req.userId) {
+        return;
+    }
     list_1.default.destroy({ where: { id: listId } })
         .then(response => {
         res.json(response);
@@ -81,8 +95,12 @@ exports.deleteList = deleteList;
 const insertIntoList = (req, res, next) => {
     const listId = parseInt(req.params.listId);
     const itemId = req.body.itemId;
+    const userId = req.body.userId;
     const itemName = req.body.name;
     const category = req.body.category;
+    if (userId !== req.userId) {
+        return;
+    }
     if (itemId) {
         listItem_1.default.create({
             listId: listId,

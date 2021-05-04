@@ -1,7 +1,6 @@
 import List from '../models/list'
 import ListItem from '../models/listItem'
 import UserItem from '../models/userItem'
-import Item from '../models/item'
 import { Request, Response, NextFunction } from 'express'
 import { ListAttributes } from '../models/list'
 import { ItemInterface } from '../models/item'
@@ -10,6 +9,9 @@ import UserCategory from '../models/userCategory'
 
 export const getUserLists = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
+    if (userId !== req.userId) {
+        return
+    }
     List.findAll({ where: { userId: userId }})
         .then(list => {
             return res.json(list)
@@ -21,6 +23,10 @@ export const getUserLists = (req: Request, res: Response, next: NextFunction) =>
 
 export const getListDetails = (req: Request, res: Response, next: NextFunction) => {
     const listId = parseInt(req.params.listId)
+    const userId = req.query.userId
+    if (userId !== req.userId) {
+        return
+    }
     List.findOne({ where: { id: listId }, 
         include: {
             model: UserItem
@@ -37,6 +43,9 @@ export const getListDetails = (req: Request, res: Response, next: NextFunction) 
 export const saveList = (req: Request, res: Response, next: NextFunction) => {
     const list: ItemInterface[] = req.body.list
     const userId: number = req.body.userId
+    if (userId !== req.userId) {
+        return
+    }
     let result = 'List created successfully'
     if (list.length < 1) {
         return res.status(400).json({
@@ -69,6 +78,10 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
 
 export const deleteList = (req: Request, res: Response, next: NextFunction) => {
     const listId: number = parseInt(req.params.listId)
+    const userId = req.query.userId
+    if (userId !== req.userId) {
+        return
+    }
     List.destroy({ where: { id: listId }})
     .then(response => {
         res.json(response)
@@ -81,8 +94,12 @@ export const deleteList = (req: Request, res: Response, next: NextFunction) => {
 export const insertIntoList = (req: Request, res: Response, next: NextFunction) => {
     const listId: number = parseInt(req.params.listId)
     const itemId: number = req.body.itemId
+    const userId = req.body.userId
     const itemName: string = req.body.name 
     const category: string = req.body.category
+    if (userId !== req.userId) {
+        return
+    }
     if (itemId) {
         ListItem.create({
             listId: listId,

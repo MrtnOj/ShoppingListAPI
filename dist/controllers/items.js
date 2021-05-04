@@ -37,6 +37,9 @@ exports.getUserItems = getUserItems;
 const getSuggestions = (req, res, next) => {
     const userId = req.params.userId;
     let itemBuyHistory = [];
+    if (userId !== req.userId) {
+        return;
+    }
     userItem_1.default.findAll({ where: { userId: userId } })
         .then(items => {
         items.forEach(item => {
@@ -65,7 +68,7 @@ const getSuggestions = (req, res, next) => {
         const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1);
         const suggestions = suggestionsCalculator_1.default(filteredBuyHistory);
         res.json(suggestions);
-    }, 2000);
+    }, 1000);
 };
 exports.getSuggestions = getSuggestions;
 const itemsBought = (req, res, next) => {
@@ -97,6 +100,9 @@ const createUserItem = (req, res, next) => {
     const categoryId = (_a = req.body.category) === null || _a === void 0 ? void 0 : _a.id;
     const categoryName = typeof (req.body.category === 'string') ? req.body.category : null;
     const lasts = req.body.lasts;
+    if (userId !== req.userId) {
+        return;
+    }
     if (categoryId) {
         userItem_1.default.create({
             name: name,
@@ -152,6 +158,9 @@ const editUserItem = (req, res, next) => {
     const newName = req.body.newName;
     const categoryId = req.body.category.id;
     const categoryName = typeof (req.body.category === 'string') ? req.body.category : null;
+    if (userId !== req.userId) {
+        return;
+    }
     if (categoryId) {
         userItem_1.default.update({ name: newName, userCategoryId: categoryId }, { where: { id: itemId } })
             .then(updatedItem => {
@@ -189,6 +198,10 @@ const editUserItem = (req, res, next) => {
 exports.editUserItem = editUserItem;
 const deleteUserItem = (req, res, next) => {
     const itemId = parseInt(req.params.itemId);
+    const userId = req.query.userId;
+    if (userId !== req.userId) {
+        return;
+    }
     userItem_1.default.destroy({ where: { id: itemId } })
         .then(response => {
         res.json(response);

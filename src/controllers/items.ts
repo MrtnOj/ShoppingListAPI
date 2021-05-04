@@ -41,6 +41,9 @@ export const getUserItems = (req: Request, res: Response, next: NextFunction) =>
 export const getSuggestions = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId
     let itemBuyHistory: BuyHistory[] = []
+    if (userId !== req.userId) {
+        return
+    }
     UserItem.findAll({ where: {userId: userId}})
     .then(items => {
         items.forEach(item => {
@@ -69,7 +72,7 @@ export const getSuggestions = (req: Request, res: Response, next: NextFunction) 
         const filteredBuyHistory = itemBuyHistory.filter(item => item.boughtDates.length > 1)
         const suggestions = suggestionsCalculator(filteredBuyHistory)
         res.json(suggestions)
-    }, 2000)
+    }, 1000)
 
 }
 
@@ -101,6 +104,9 @@ export const createUserItem = (req: Request, res: Response, next: NextFunction) 
     const categoryId = req.body.category?.id
     const categoryName = typeof(req.body.category === 'string') ? req.body.category : null
     const lasts = req.body.lasts
+    if (userId !== req.userId) {
+        return
+    }
 
     if (categoryId) {
         UserItem.create({
@@ -155,6 +161,10 @@ export const editUserItem = (req: Request, res: Response, next: NextFunction) =>
     const newName = req.body.newName
     const categoryId = req.body.category.id
     const categoryName = typeof(req.body.category === 'string') ? req.body.category : null
+    if (userId !== req.userId) {
+        return
+    }
+
     if (categoryId) {
         UserItem.update({ name: newName, userCategoryId: categoryId }, { where: { id: itemId }})
         .then(updatedItem => {
@@ -190,6 +200,11 @@ export const editUserItem = (req: Request, res: Response, next: NextFunction) =>
 
 export const deleteUserItem = (req: Request, res: Response, next: NextFunction) => {
     const itemId: number = parseInt(req.params.itemId)
+    const userId: string = (req.query.userId as string)
+    if (userId !== req.userId) {
+        return
+    }
+
     UserItem.destroy({ where: { id: itemId }})
     .then(response => {
         res.json(response)

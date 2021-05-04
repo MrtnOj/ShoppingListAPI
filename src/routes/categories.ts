@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import isAuth from '../middleware/is-auth'
 
 import { 
     getCategories,
@@ -13,14 +14,14 @@ const router = Router()
 
 router.get('/', getCategories)
 
-router.get('/:userId', getUserCategories)
+router.get('/:userId', isAuth, getUserCategories)
 
-router.post('/', createCategory)
+router.post('/', isAuth, createCategory)
 
-router.post('/:userId', createUserCategory)
+router.post('/:userId', isAuth, createUserCategory)
 
-router.put('/:categoryId', editUserCategory)
+router.put('/:categoryId', isAuth, editUserCategory)
 
-router.delete('/:categoryId', deleteUserCategory)
+router.delete('/:categoryId', isAuth, deleteUserCategory)
 
 export default router

@@ -52,14 +52,14 @@ const logIn = (req, res, next) => {
     user_1.default.findOne({ where: { username: username } })
         .then((user) => {
         if (!user) {
-            return Promise.reject('No such user you dumb fuck');
+            return Promise.reject('Username not found');
         }
         loadedUser = user;
         return bcryptjs_1.default.compare(password, user.password);
     })
         .then(isEqual => {
         if (!isEqual) {
-            return Promise.reject('Wrong password fuckin daft toad');
+            return Promise.reject('Wrong password');
         }
         const token = jsonwebtoken_1.default.sign({
             username: loadedUser === null || loadedUser === void 0 ? void 0 : loadedUser.username,

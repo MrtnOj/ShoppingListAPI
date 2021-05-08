@@ -49,14 +49,14 @@ export const logIn = (req: Request, res: Response, next: NextFunction) => {
     User.findOne({where: { username: username}} ) 
         .then((user) => {
             if (!user) {
-                return Promise.reject('No such user you dumb fuck')
+                return Promise.reject('Username not found')
             }
             loadedUser = user
             return bcrypt.compare(password, user.password)
         })
         .then(isEqual => {
             if (!isEqual) {
-                return Promise.reject('Wrong password fuckin daft toad')
+                return Promise.reject('Wrong password')
             }
             const token = jwt.sign({
                 username: loadedUser?.username,

@@ -41,7 +41,7 @@ export const getListDetails = (req: Request, res: Response, next: NextFunction) 
 }
 
 export const saveList = (req: Request, res: Response, next: NextFunction) => {
-    const list: ItemInterface[] = req.body.list
+    const list = req.body.list
     const userId: number = req.body.userId
     if (userId !== req.userId) {
         return
@@ -53,10 +53,11 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
         })
     }
     List.create({
-        userId: userId
+        userId: userId,
+        name: list.name
     })
     .then((createdList: any) => {
-        list.forEach((listItem: any) => {
+        list.items.forEach((listItem: any) => {
             ListItem.create({
                 listId: createdList.id,
                 userItemId: listItem.id

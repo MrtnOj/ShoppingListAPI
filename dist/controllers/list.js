@@ -54,10 +54,11 @@ const saveList = (req, res, next) => {
         });
     }
     list_1.default.create({
-        userId: userId
+        userId: userId,
+        name: list.name
     })
         .then((createdList) => {
-        list.forEach((listItem) => {
+        list.items.forEach((listItem) => {
             listItem_1.default.create({
                 listId: createdList.id,
                 userItemId: listItem.id

@@ -183,3 +183,19 @@ export const removeListItem = (req: Request, res: Response, next: NextFunction) 
         console.log(err)
     })
 }
+
+export const changeListName = (req: Request, res: Response, next: NextFunction) => {
+    const newName = req.body.newName
+    const listId = req.params.listId
+    const userId = req.body.userId
+    if (userId !== req.userId) {
+        return
+    }
+    List.update({ name: newName }, { where: { id: listId }})
+    .then(newList => {
+        res.json(newList)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}

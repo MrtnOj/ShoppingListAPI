@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import List from '../models/list'
-import { saveList, getUserLists, getListDetails, insertIntoList, deleteList, removeListItem } from '../controllers/list'
+import { saveList, getUserLists, getListDetails, insertIntoList, deleteList, removeListItem, changeListName } from '../controllers/list'
 import isAuth from '../middleware/is-auth'
 
 
@@ -15,6 +15,8 @@ router.post('/add/:listId', isAuth, insertIntoList)
 router.delete('/listitem/delete/:listItemId', isAuth, removeListItem)
 
 router.delete('/delete/:listId', isAuth, deleteList)
+
+router.put('/:listId', isAuth, changeListName)
 
 router.post('/', isAuth, saveList)
 

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeListItem = exports.insertIntoList = exports.deleteList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
+exports.changeListName = exports.removeListItem = exports.insertIntoList = exports.deleteList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
 const list_1 = __importDefault(require("../models/list"));
 const listItem_1 = __importDefault(require("../models/listItem"));
 const userItem_1 = __importDefault(require("../models/userItem"));
@@ -188,3 +188,19 @@ const removeListItem = (req, res, next) => {
     });
 };
 exports.removeListItem = removeListItem;
+const changeListName = (req, res, next) => {
+    const newName = req.body.newName;
+    const listId = req.params.listId;
+    const userId = req.body.userId;
+    if (userId !== req.userId) {
+        return;
+    }
+    list_1.default.update({ name: newName }, { where: { id: listId } })
+        .then(newList => {
+        res.json(newList);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.changeListName = changeListName;

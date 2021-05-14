@@ -10,6 +10,7 @@ const router = express_1.Router();
 router.get('/:userId', is_auth_1.default, list_1.getUserLists);
 router.get('/listdetails/:listId', is_auth_1.default, list_1.getListDetails);
 router.post('/add/:listId', is_auth_1.default, list_1.insertIntoList);
+router.delete('/listitem/delete/:listItemId', is_auth_1.default, list_1.removeListItem);
 router.delete('/delete/:listId', is_auth_1.default, list_1.deleteList);
 router.post('/', is_auth_1.default, list_1.saveList);
 exports.default = router;

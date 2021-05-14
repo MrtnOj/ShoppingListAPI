@@ -168,3 +168,18 @@ export const insertIntoList = (req: Request, res: Response, next: NextFunction) 
         })
     }
 }
+
+export const removeListItem = (req: Request, res: Response, next: NextFunction) => {
+    const listItemId = req.params.listItemId
+    const userId = req.query.userId
+    if (userId !== req.userId) {
+        return
+    }
+    ListItem.destroy({ where: { id: listItemId }})
+    .then(response => {
+        res.json(response)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}

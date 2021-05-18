@@ -25,7 +25,7 @@ const getUserItems = (req, res, next) => {
     userItem_1.default.findAll({ where: { userId: userId } })
         .then(result => {
         if (userId !== req.userId) {
-            return Promise.reject('You are not authorized for this, fuck off m8');
+            return Promise.reject('You are not authorized for this');
         }
         res.json(result);
     })

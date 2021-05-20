@@ -14,15 +14,14 @@ export interface BuyHistory {
 }
 
 export const getItems = (req: Request, res: Response, next: NextFunction) => {
-    // Item.findAll()
-    // .then(result => {
-    //     res.json(result)
-    //     console.log(result)
-    // })
-    // .catch(err => {
-    //     console.log(err)
-    // })
-    res.send('Heyo mate')
+    Item.findAll()
+    .then(result => {
+        res.json(result)
+        console.log(result)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 }
 
 export const getUserItems = (req: Request, res: Response, next: NextFunction) => {

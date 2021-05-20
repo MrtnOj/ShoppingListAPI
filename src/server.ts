@@ -34,7 +34,7 @@ const test = (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-app.use('/', test)
+app.use('/doo/', test)
 app.use('/items', itemsRoutes)
 app.use('/categories', categoriesRoutes)
 app.use('/auth', authRoutes)

@@ -16,6 +16,8 @@ import ItemBought from './models/itemBought'
 
 import sequelize from './util/database'
 
+import { Request, Response, NextFunction } from 'express'
+
 const app = express()
 
 app.use(bodyParser.json())
@@ -27,14 +29,17 @@ app.use((req, res, next) => {
     next()
 })
 
+const test = (req: Request, res: Response, next: NextFunction) => {
+    res.send('Heyo')
+}
+
+
+app.use('/', test)
 app.use('/items', itemsRoutes)
 app.use('/categories', categoriesRoutes)
 app.use('/auth', authRoutes)
 app.use('/list', listRoutes)
 
-app.get('/', (req, res) => {
-    res.send('Hey')
-})
 
 Item.belongsTo(Category)
 Category.hasMany(Item)

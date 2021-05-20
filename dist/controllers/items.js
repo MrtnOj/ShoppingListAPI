@@ -4,20 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserItem = exports.editUserItem = exports.createUserItem = exports.itemsBought = exports.getSuggestions = exports.getUserItems = exports.getItems = void 0;
-const item_1 = __importDefault(require("../models/item"));
 const userItem_1 = __importDefault(require("../models/userItem"));
 const suggestionsCalculator_1 = __importDefault(require("../util/suggestionsCalculator"));
 const itemBought_1 = __importDefault(require("../models/itemBought"));
 const userCategory_1 = __importDefault(require("../models/userCategory"));
 const getItems = (req, res, next) => {
-    item_1.default.findAll()
-        .then(result => {
-        res.json(result);
-        console.log(result);
-    })
-        .catch(err => {
-        console.log(err);
-    });
+    // Item.findAll()
+    // .then(result => {
+    //     res.json(result)
+    //     console.log(result)
+    // })
+    // .catch(err => {
+    //     console.log(err)
+    // })
+    res.send('Heyo mate');
 };
 exports.getItems = getItems;
 const getUserItems = (req, res, next) => {

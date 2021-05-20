@@ -26,6 +26,10 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+const test = (req, res, next) => {
+    res.send('Heyo');
+};
+app.use('/', test);
 app.use('/items', items_1.default);
 app.use('/categories', categories_1.default);
 app.use('/auth', auth_1.default);

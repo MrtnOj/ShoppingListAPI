@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const sequelize = new sequelize_1.Sequelize('shoppinglist', 'postgres', '1', {
+const constants_1 = require("../constants");
+const sequelize = new sequelize_1.Sequelize('shoppinglist', constants_1.config.db.user, constants_1.config.db.password, {
     dialect: 'postgres',
     host: 'localhost'
 });

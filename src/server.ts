@@ -32,6 +32,10 @@ app.use('/categories', categoriesRoutes)
 app.use('/auth', authRoutes)
 app.use('/list', listRoutes)
 
+app.get('/', (req, res) => {
+    res.send('Hey')
+})
+
 Item.belongsTo(Category)
 Category.hasMany(Item)
 

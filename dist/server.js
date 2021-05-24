@@ -29,11 +29,11 @@ app.use((req, res, next) => {
 const test = (req, res, next) => {
     res.send('Heyo');
 };
-app.use('/doo/', test);
-app.use('/items', items_1.default);
-app.use('/categories', categories_1.default);
-app.use('/auth', auth_1.default);
-app.use('/list', list_1.default);
+app.use('/api/doo/', test);
+app.use('/api/items', items_1.default);
+app.use('/api/categories', categories_1.default);
+app.use('/api/auth', auth_1.default);
+app.use('/api/list', list_1.default);
 item_1.default.belongsTo(category_1.default);
 category_1.default.hasMany(item_1.default);
 userItem_1.default.belongsTo(user_1.default);

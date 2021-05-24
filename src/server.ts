@@ -34,11 +34,11 @@ const test = (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-app.use('/doo/', test)
-app.use('/items', itemsRoutes)
-app.use('/categories', categoriesRoutes)
-app.use('/auth', authRoutes)
-app.use('/list', listRoutes)
+app.use('/api/doo/', test)
+app.use('/api/items', itemsRoutes)
+app.use('/api/categories', categoriesRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/list', listRoutes)
 
 
 Item.belongsTo(Category)

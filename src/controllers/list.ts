@@ -70,7 +70,7 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
                 result = `Error saving list, item ID: ${listItem.id}`
             })
         })
-        res.json(result)
+        res.json(createdList.id)
     })
     .catch(err => {
         console.log(err)

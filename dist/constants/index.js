@@ -13,4 +13,4 @@ const dev = {
         password: '1'
     }
 };
-exports.config = process.env.NODE_ENV === 'development' ? dev : prod;
+exports.config = dev; // process.env.NODE_ENV === 'development' ? dev : prod;

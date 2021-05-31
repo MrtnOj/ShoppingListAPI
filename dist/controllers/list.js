@@ -71,7 +71,7 @@ const saveList = (req, res, next) => {
                 result = `Error saving list, item ID: ${listItem.id}`;
             });
         });
-        res.json(result);
+        res.json(createdList.id);
     })
         .catch(err => {
         console.log(err);

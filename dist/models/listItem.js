@@ -11,6 +11,9 @@ const ListItem = database_1.default.define('list_item', {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
+    },
+    comment: {
+        type: sequelize_1.DataTypes.STRING,
     }
 });
 exports.default = ListItem;

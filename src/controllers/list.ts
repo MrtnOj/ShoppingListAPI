@@ -2,9 +2,6 @@ import List from '../models/list'
 import ListItem from '../models/listItem'
 import UserItem from '../models/userItem'
 import { Request, Response, NextFunction } from 'express'
-import { ListAttributes } from '../models/list'
-import { ItemInterface } from '../models/item'
-import Category from '../models/category'
 import UserCategory from '../models/userCategory'
 
 export const getUserLists = (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +46,7 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
     let result = 'List created successfully'
     if (list.length < 1) {
         return res.status(400).json({
-            error: 'Empty list you fucknut'
+            error: 'Empty list'
         })
     }
     List.create({
@@ -60,7 +57,8 @@ export const saveList = (req: Request, res: Response, next: NextFunction) => {
         list.items.forEach((listItem: any) => {
             ListItem.create({
                 listId: createdList.id,
-                userItemId: listItem.id
+                userItemId: listItem.id,
+                comment: listItem.comment
             })
             .then(response => {
                 console.log(response)
@@ -104,7 +102,7 @@ export const insertIntoList = (req: Request, res: Response, next: NextFunction) 
     if (itemId) {
         ListItem.create({
             listId: listId,
-            itemId: itemId
+            userItemId: itemId
         })
         .then(response => {
             res.send(response)

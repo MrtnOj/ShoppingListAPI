@@ -3,6 +3,7 @@ import db from '../util/database'
 
 export interface ListItemAttributes extends Model {
     id: number;
+    comment?: string;
     listId: number;
     createdAt: Date;
     updatedAt: Date;
@@ -14,6 +15,9 @@ const ListItem = db.define<ListItemAttributes>('list_item', {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
+    },
+    comment: {
+        type: DataTypes.STRING,
     }
 })
 

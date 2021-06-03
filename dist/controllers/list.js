@@ -50,7 +50,7 @@ const saveList = (req, res, next) => {
     let result = 'List created successfully';
     if (list.length < 1) {
         return res.status(400).json({
-            error: 'Empty list you fucknut'
+            error: 'Empty list'
         });
     }
     list_1.default.create({
@@ -61,7 +61,8 @@ const saveList = (req, res, next) => {
         list.items.forEach((listItem) => {
             listItem_1.default.create({
                 listId: createdList.id,
-                userItemId: listItem.id
+                userItemId: listItem.id,
+                comment: listItem.comment
             })
                 .then(response => {
                 console.log(response);
@@ -105,7 +106,7 @@ const insertIntoList = (req, res, next) => {
     if (itemId) {
         listItem_1.default.create({
             listId: listId,
-            itemId: itemId
+            userItemId: itemId
         })
             .then(response => {
             res.send(response);

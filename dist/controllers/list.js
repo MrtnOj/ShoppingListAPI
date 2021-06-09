@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeListName = exports.removeListItem = exports.insertIntoList = exports.deleteList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
+exports.updateList = exports.changeListName = exports.removeListItem = exports.insertIntoList = exports.deleteList = exports.saveList = exports.getListDetails = exports.getUserLists = void 0;
 const list_1 = __importDefault(require("../models/list"));
 const listItem_1 = __importDefault(require("../models/listItem"));
 const userItem_1 = __importDefault(require("../models/userItem"));
@@ -205,3 +205,24 @@ const changeListName = (req, res, next) => {
     });
 };
 exports.changeListName = changeListName;
+const updateList = (req, res, next) => {
+    const list = req.body.list;
+    listItem_1.default.destroy({ where: { listId: list.id } })
+        .then(response => {
+        list.items.forEach((item) => {
+            listItem_1.default.create({
+                listId: list.id,
+                userItemId: item.id,
+                comment: item.list_item.comment
+            })
+                .then(response => {
+                console.log(response);
+            });
+        });
+        res.json(response);
+    })
+        .catch(err => {
+        console.log(err);
+    });
+};
+exports.updateList = updateList;

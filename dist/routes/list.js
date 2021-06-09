@@ -12,6 +12,7 @@ router.get('/listdetails/:listId', is_auth_1.default, list_1.getListDetails);
 router.post('/add/:listId', is_auth_1.default, list_1.insertIntoList);
 router.delete('/listitem/delete/:listItemId', is_auth_1.default, list_1.removeListItem);
 router.delete('/delete/:listId', is_auth_1.default, list_1.deleteList);
+router.put('/update/', is_auth_1.default, list_1.updateList);
 router.put('/:listId', is_auth_1.default, list_1.changeListName);
 router.post('/', is_auth_1.default, list_1.saveList);
 exports.default = router;

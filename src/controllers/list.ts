@@ -197,3 +197,24 @@ export const changeListName = (req: Request, res: Response, next: NextFunction) 
         console.log(err)
     })
 }
+
+export const updateList = (req: Request, res: Response, next: NextFunction) => {
+    const list = req.body.list
+    ListItem.destroy({ where: {listId: list.id }})
+    .then(response => {
+        list.items.forEach((item: any) => {
+            ListItem.create({
+                listId: list.id,
+                userItemId: item.id,
+                comment: item.list_item.comment
+            })
+            .then(response => {
+                console.log(response)
+            })
+        })
+        res.json(response)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
